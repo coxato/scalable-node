@@ -1,14 +1,16 @@
 const router = require("express").Router();
 const response = require("../../../network/response");
 const controller = require("./index");
+// middlewares
+const checkAuth = require("./secure");
 
 // ===== routes =====
 
 router.get("/", getUsers);
 router.get("/:id", getUserById);
 router.post("/", createUser);
+router.put("/:id", checkAuth('update'), updateUser);
 router.delete("/:id", deleteUser);
-
 // ===== route functions =====
 
 function getUsers(req, res){
@@ -25,7 +27,14 @@ function getUserById(req, res){
 
 function createUser(req, res){
     controller.createUser(req.body)
-        .then( () => response.success(req, res, 'user created') )
+        .then(() => response.success(req, res, 'user created'))
+        .catch( err => response.error(req, res, err.message) )
+}
+
+function updateUser(req, res) {
+    const { id } = req.params; 
+    controller.updateUser(id, req.body)
+        .then(() => response.success(req, res, 'user updated'))
         .catch( err => response.error(req, res, err.message) )
 }
 
