@@ -7,11 +7,13 @@ function success(req, res, dataOrMessage = '', status = 200){
 }
 
 
-function error(req, res, dataOrMessage = "Internal server error", status = 500){
+function error(req, res, err){
+    const status = err.statusCode || 500;
+    
     res.status(status).send({
         error: true,
         status,
-        body: dataOrMessage
+        body: err.message || 'internal server error'
     });
 }
 

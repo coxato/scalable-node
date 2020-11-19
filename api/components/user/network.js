@@ -16,32 +16,32 @@ router.delete("/:id", deleteUser);
 function getUsers(req, res){
     controller.listUsers()
         .then( users => response.success(req, res, users) )
-        .catch( err => response.error(req, res, err.message) )
+        .catch( err => response.error(req, res, err) )
 }
 
 function getUserById(req, res){
     controller.getUser(req.params.id)
         .then( user => response.success(req, res, user) )
-        .catch( err => response.error(req, res, err.message) )
+        .catch( err => response.error(req, res, err) )
 }
 
 function createUser(req, res){
     controller.createUser(req.body)
         .then(() => response.success(req, res, 'user created'))
-        .catch( err => response.error(req, res, err.message) )
+        .catch( err => response.error(req, res, err) )
 }
 
 function updateUser(req, res) {
     const { id } = req.params; 
     controller.updateUser(id, req.body)
         .then(() => response.success(req, res, 'user updated'))
-        .catch( err => response.error(req, res, err.message) )
+        .catch( err => response.error(req, res, err) )
 }
 
 function deleteUser(req, res){
     controller.deleteUser(req.params.id)
         .then( (deletedId) => response.success(req, res, `user with id ${deletedId} deleted`) )
-        .catch( err => response.error(req, res, err.message) )
+        .catch( err => response.error(req, res, err) )
 }
 
 module.exports = router;

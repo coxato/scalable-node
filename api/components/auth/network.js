@@ -13,7 +13,7 @@ function login(req, res) {
     
     controller.login(username, password)
         .then( token => response.success(req, res, {token}))
-        .catch( err => response.error(req, res, err.message));
+        .catch( err => response.error(req, res, err));
 }
 
 module.exports = router;
