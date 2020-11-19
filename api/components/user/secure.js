@@ -7,7 +7,7 @@ module.exports = function checkAuth(action) {
     return function checkPermissions(req, res, next) {
         switch (action) {
             case 'update':
-                auth.check.owner(req, req.body.id);
+                auth.check.owner(req, req.params.id);
                 next();
                 break;
 

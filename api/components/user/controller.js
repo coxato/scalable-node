@@ -18,7 +18,10 @@ function userController(injectedStore){
 
 
     async function getUserById(id){
-        return await store.get(TABLE, id);
+        const user = await store.get(TABLE, id);
+        if(!user) throw err("user does not exist", 404);
+
+        return user;
     }
 
 

@@ -20,7 +20,7 @@ function getUsers(req, res){
 }
 
 function getUserById(req, res){
-    controller.getUser(req.params.id)
+    controller.getUserById(req.params.id)
         .then( user => response.success(req, res, user) )
         .catch( err => response.error(req, res, err) )
 }
