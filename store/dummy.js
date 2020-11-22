@@ -38,7 +38,7 @@ async function query(table, objectData){
     return data;
 }
 
-async function upsert(table, data){
+async function insert(table, data){
     if( !db[table] ) db[table] = [];
     return await db[table].push(data); 
 }
@@ -69,7 +69,7 @@ module.exports = {
     get,
     getBy,
     query,
-    upsert,
+    insert,
     update,
     remove
 }

@@ -18,7 +18,7 @@ function userController(injectedStore){
 
 
     async function getUserById(id){
-        const user = await store.get(TABLE, id);
+        const user = await store.query(TABLE, {id});
         if(!user) throw err("user does not exist", 404);
 
         return user;
@@ -26,7 +26,7 @@ function userController(injectedStore){
 
 
     async function getUserByUsername(username){
-        return await store.getBy(TABLE, 'username', username);
+        return await store.query(TABLE, {username});
     }
 
 
@@ -38,11 +38,11 @@ function userController(injectedStore){
 
         body.id = nanoid();
 
-        await auth.saverUserAuthData(body);
+        await auth.saverUserAuthData(body, true);
         // just save password in auth table
         delete body.password 
 
-        return await store.upsert(TABLE, body);
+        return await store.insert(TABLE, body);
     }
 
     async function updateUser(id, body){
@@ -52,7 +52,7 @@ function userController(injectedStore){
 
         // update user auth data, only if username or password is different
         if(body.username || body.password){
-            await auth.saverUserAuthData(body);        
+            await auth.saverUserAuthData({...body, id}, false);        
         }
 
         // ============================
@@ -60,9 +60,9 @@ function userController(injectedStore){
         // ============================
         user = {
             ...user,
-            ...body,
-            password: undefined
+            ...body
         }
+        delete user.password;
 
         return await store.update(TABLE, id, user);
     }

@@ -23,7 +23,7 @@ function authController(injectedStore){
         }
     }
 
-    async function saverUserAuthData(data){
+    async function saverUserAuthData(data, isNewUser){
         let { id, username, password } = data;
         password = await auth.encrypt(password); 
 
@@ -32,7 +32,9 @@ function authController(injectedStore){
             username,
             password    
         }
-        return await store.upsert(TABLE, authData); 
+        if(isNewUser) return await store.insert(TABLE, authData);
+        return await store.update(TABLE, id, authData);
+         
     }
 
     return {
