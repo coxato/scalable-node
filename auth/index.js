@@ -17,10 +17,10 @@ function jwtVerifyAndDecode(token) {
 }
 
 function getToken(bearerString){
-    if(!bearerString) throw err("token not provided", 400)
+    if(!bearerString) throw err("token not provided", 401)
 
     if(bearerString.indexOf("Bearer ") === -1){
-        throw err("invalid token format", 400);
+        throw err("invalid token format", 401);
     }
 
     const token = bearerString.replace("Bearer ", "");
@@ -32,20 +32,32 @@ function decodeHeader(req){
     const bearer = req.headers.authorization || '';
     const token = getToken(bearer);
     const decoded = jwtVerifyAndDecode(token);
-    return decoded;
+    if(decoded){
+        req.user = decoded
+        return decoded;
+    };
+    return null;
 }
 
 const check = {
     // check token owner
     owner: function(req, ownerId){
         const decoded = decodeHeader(req);
-        req.user = decoded;
         // check if the token correspond to owner
         if(decoded.id === ownerId){
             return; 
         }
 
         throw err("sorry, not authorized", 401);
+    },
+
+    // check if is logged
+    logged: function(req){
+        if(decodeHeader(req)){
+            return;
+        }
+
+        throw err("user not logged", 401);
     }
 
 }

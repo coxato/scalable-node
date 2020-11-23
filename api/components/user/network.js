@@ -8,9 +8,15 @@ const checkAuth = require("./secure");
 
 router.get("/", getUsers);
 router.get("/:id", getUserById);
+router.get("/followers/:id", getFollowers)
+
 router.post("/", createUser);
+router.post("/follow/:id", checkAuth('follow'), followUser);
+
 router.put("/:id", checkAuth('update'), updateUser);
+
 router.delete("/:id", deleteUser);
+
 // ===== route functions =====
 
 function getUsers(req, res, next){
@@ -25,10 +31,22 @@ function getUserById(req, res, next){
         .catch(next)
 }
 
+function getFollowers(req, res, next){
+    controller.getFollowers(req.params.id)
+        .then( user => response.success(req, res, user) )
+        .catch(next)
+}
+
 function createUser(req, res, next){
     controller.createUser(req.body)
         .then(() => response.success(req, res, 'user created'))
         .catch(next)
+}
+
+function followUser(req, res, next){
+    controller.followUser(req.user.id, req.params.id)
+        .then( message => response.success(req, res, message, 201))
+        .catch(next);
 }
 
 function updateUser(req, res, next) {

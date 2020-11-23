@@ -58,11 +58,24 @@ async function getBy(table, property, compareData){
     return await asyncDB.query(q, compareData);
 }
 
-async function query(table, query){
-    const q = `SELECT * FROM ${table} WHERE ?`;
+async function query(table, query, join = null, toArray = false){
+    let queryJoin = '';
+
+    if(join){
+        const key = Object.keys(join)[0];
+        const value = join[key];
+        queryJoin = `JOIN ${key} ON ${table}.${value} = ${key}.id`;
+    }
+
+    const q = `SELECT * FROM ${table} ${queryJoin} WHERE ${table}.?`;
+    
     try {
         const data = await asyncDB.query(q, query);
-        return data[0];
+        const length = data.length;
+        // return first element
+        if(length <= 1 && !toArray) return data[0];
+        // return data array
+        return data;
 
     } catch (err) { throw err }
 }

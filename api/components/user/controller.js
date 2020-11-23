@@ -72,13 +72,28 @@ function userController(injectedStore){
         return await store.remove(id);
     }
 
+    async function followUser(user_from, user_to){
+        return await store.insert(TABLE+'_follow', {
+            user_from,
+            user_to
+        }); 
+    }
+
+    async function getFollowers(id){
+        const join = { [TABLE]: 'user_to' };
+        const query = { 'user_from': id };
+        return await store.query(TABLE+'_follow', query, join, true);
+    }
+
 
     return{
         listUsers,
         getUserById,
         createUser,
         updateUser,
-        deleteUser
+        deleteUser,
+        followUser,
+        getFollowers
     }
 }
 
