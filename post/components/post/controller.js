@@ -10,6 +10,10 @@ function postController(injectedStore){
         store = require("../../../store/dummy");
     }
 
+    function getAllPosts(){
+        return store.list(TABLE);    
+    }
+
     function createPost(userId, postData){
         const post = PostObject({ userId, ...postData });
         post.id = nanoid();
@@ -18,7 +22,8 @@ function postController(injectedStore){
     }
 
     return {
-        createPost
+        createPost,
+        getAllPosts
     }
 
 }

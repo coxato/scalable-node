@@ -6,9 +6,17 @@ const securePostMiddleware = require("./secure");
 
 // ===== routes =====
 
+router.get("/", getAllPosts);
+
 router.post("/", securePostMiddleware('create'), createPost);
 
 // ===== routes functions =====
+
+function getAllPosts(req, res, next) {
+    controller.getAllPosts()
+        .then( data => response.success(req, res, {data}))
+        .catch(next);
+}
 
 function createPost(req, res, next) {
     const { id } = req.user;

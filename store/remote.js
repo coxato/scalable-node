@@ -18,8 +18,24 @@ function RemoteDb(host, port, prefixUrl = '', https = false){
         return await _fetchDB('GET', `get/${table}/${id}`);
     }
 
+    async function getBy(table, property, compareData){
+        return await _fetchDB('GET', `getBy/${table}/${property}`, {compareData});
+    }
+
     async function query(table, query, join, toArray){
         return await _fetchDB('GET', `query/${table}/${toArray}`, {query, join});
+    }
+
+    async function insert(table, data){
+        return await _fetchDB('POST', `insert/${table}`, data );
+    }
+
+    async function update(table, id, newData){
+        return await _fetchDB('PUT', `update/${table}/${id}`, newData );
+    }
+
+    async function remove(table, id){
+        return await _fetchDB('DELETE', `delete/${table}/${id}`);
     }
 
 
@@ -49,7 +65,11 @@ function RemoteDb(host, port, prefixUrl = '', https = false){
     return {
         list,
         get,
-        query
+        getBy,
+        query,
+        insert,
+        update,
+        remove
     }
 
 }

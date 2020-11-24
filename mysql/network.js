@@ -6,7 +6,7 @@ const store = require("../store/mysql");
 
 router.get("/list/:table", list);
 router.get("/get/:table/:id", get);
-router.get("/getBy/:table/:property/:compareData", getBy);
+router.get("/getBy/:table/:property", getBy);
 router.get("/query/:table/:toArray", query);
 
 router.post("/insert/:table", insert);
@@ -34,7 +34,8 @@ function get(req, res, next){
 
 
 function getBy(req, res, next){
-    const { table, id, compareData } = req.params;
+    const { table, id } = req.params;
+    const { compareData } = req.body;
 
     store.getBy(table, id, compareData)
         .then( data => response.success(req, res, data, 200))
